@@ -151,7 +151,7 @@ class _TodoListPageState extends State<TodoListPage> {
               deleteAllTodos();
             },
             style: TextButton.styleFrom(primary: Colors.red),
-            child: Text('Limpar tudo'),
+            child: Text('Limpar Tudo'),
           ),
         ],
       ),
