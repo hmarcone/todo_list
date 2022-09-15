@@ -34,8 +34,7 @@ class _TodoListPageState extends State<TodoListPage> {
                         decoration: InputDecoration(
                             border: OutlineInputBorder(),
                             labelText: 'Adicione uma Tarefa',
-                            hintText: 'Ex. Estudar Flutter'
-                        ),
+                            hintText: 'Ex. Estudar Flutter'),
                       ),
                     ),
                     SizedBox(width: 8),
@@ -67,7 +66,7 @@ class _TodoListPageState extends State<TodoListPage> {
                   child: ListView(
                     shrinkWrap: true,
                     children: [
-                      for(Todo todo in todos)
+                      for (Todo todo in todos)
                         TodoListItem(
                           todo: todo,
                           onDelete: onDelete,
@@ -85,12 +84,12 @@ class _TodoListPageState extends State<TodoListPage> {
                     ),
                     SizedBox(width: 8),
                     ElevatedButton(
-                        onPressed: () {},
-                        style: ElevatedButton.styleFrom(
-                          primary: Color(0xff00d7f3),
-                          padding: EdgeInsets.all(14),
-                        ),
-                        child: Text('Limpar tudo'),
+                      onPressed: showDeleteTodosConfirmationDialog,
+                      style: ElevatedButton.styleFrom(
+                        primary: Color(0xff00d7f3),
+                        padding: EdgeInsets.all(14),
+                      ),
+                      child: Text('Limpar tudo'),
                     )
                   ],
                 )
@@ -102,8 +101,7 @@ class _TodoListPageState extends State<TodoListPage> {
     );
   }
 
-  void onDelete(Todo todo){
-
+  void onDelete(Todo todo) {
     deletedTodo = todo;
     deletedTodoPos = todos.indexOf(todo);
 
@@ -114,7 +112,8 @@ class _TodoListPageState extends State<TodoListPage> {
     ScaffoldMessenger.of(context).clearSnackBars();
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
-        content: Text('Tarefa ${todo.title} foi removida com sucesso!',
+        content: Text(
+          'Tarefa ${todo.title} foi removida com sucesso!',
           style: TextStyle(color: Color(0xff060708)),
         ),
         backgroundColor: Colors.white,
@@ -130,5 +129,38 @@ class _TodoListPageState extends State<TodoListPage> {
         duration: const Duration(seconds: 5),
       ),
     );
+  }
+
+  void showDeleteTodosConfirmationDialog() {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text('Limpar tudo?'),
+        content: Text('Você tem certeza que deseja apagar todas as tarefas?'),
+        actions: [
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+            style: TextButton.styleFrom(primary: Color(0xff00d7f3)),
+            child: Text('Cancelar'),
+          ),
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).pop();
+              deleteAllTodos();
+            },
+            style: TextButton.styleFrom(primary: Colors.red),
+            child: Text('Limpar tudo'),
+          ),
+        ],
+      ),
+    );
+  }
+
+  void deleteAllTodos(){
+    setState(() {
+      todos.clear();
+    });
   }
 }
